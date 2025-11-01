@@ -1,4 +1,11 @@
-export type EquipmentType = "glassware" | "heating" | "measuring" | "optical" | "electrical" | "chemicals";
+export type EquipmentType =
+  | "glassware"
+  | "heating"
+  | "measuring"
+  | "optical"
+  | "electrical"
+  | "chemicals"
+  | "support";
 
 export type EquipmentInteraction = "drag" | "rotate" | "pour" | "heat" | "measure" | "connect";
 

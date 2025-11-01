@@ -4,6 +4,8 @@ export type ReactionType = "displacement" | "combination" | "decomposition" | "r
 
 export type ReactionEnergy = "exothermic" | "endothermic";
 
+export type ChemicalUnit = "ml" | "g" | "drops";
+
 export interface ReactionDefinition {
   reactant2: string;
   products: string[];
@@ -19,10 +21,13 @@ export interface ChemicalDefinition {
   formula: string;
   state: ChemicalState;
   color: string;
+  temperature: number;
+  unit?: ChemicalUnit;
+  defaultAmount?: number;
+  hazards?: string[];
   volume?: number;
   mass?: number;
   concentration?: number;
-  temperature: number;
   pH?: number;
   reactsWith: ReactionDefinition[];
 }

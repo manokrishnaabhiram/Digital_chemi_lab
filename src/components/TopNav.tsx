@@ -1,13 +1,19 @@
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent, useMemo } from "react";
 import { FlaskRound, HelpCircle, Settings } from "lucide-react";
-
-const experiments = [
-  { id: "heat-01", title: "Heat and Cold" },
-  { id: "chem-01", title: "Hydrogen Gas Formation" }
-];
+import { useLabStore } from "../store/labStore";
 
 function TopNav() {
-  const [selectedId, setSelectedId] = useState(experiments[0]?.id ?? "");
+  const experimentsByCategory = useLabStore((state) => state.experimentsByCategory);
+  const selectedExperimentId = useLabStore((state) => state.selectedExperimentId);
+  const selectExperiment = useLabStore((state) => state.selectExperiment);
+  const resetCurrentExperiment = useLabStore((state) => state.resetCurrentExperiment);
+
+  const firstExperimentId = useMemo(() => {
+    const firstCategory = experimentsByCategory[0];
+    return firstCategory?.experiments[0]?.id ?? "";
+  }, [experimentsByCategory]);
+
+  const selectedId = selectedExperimentId ?? firstExperimentId;
 
   return (
     <header className="flex h-14 items-center justify-between border-b border-gray-800 bg-gray-950 px-4">
@@ -22,17 +28,24 @@ function TopNav() {
           <select
             className="rounded-md border border-gray-700 bg-gray-900 px-2 py-1 text-sm"
             value={selectedId}
-            onChange={(event: ChangeEvent<HTMLSelectElement>) => setSelectedId(event.target.value)}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => selectExperiment(event.target.value)}
           >
-            {experiments.map((experiment) => (
-              <option key={experiment.id} value={experiment.id}>
-                {experiment.title}
-              </option>
+            {experimentsByCategory.map((category) => (
+              <optgroup key={category.id} label={category.name}>
+                {category.experiments.map((experiment) => (
+                  <option key={experiment.id} value={experiment.id}>
+                    {experiment.title}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </label>
 
-        <button className="rounded-md border border-gray-700 px-3 py-1 text-sm text-gray-200 hover:bg-gray-800">
+        <button
+          className="rounded-md border border-gray-700 px-3 py-1 text-sm text-gray-200 hover:bg-gray-800"
+          onClick={() => resetCurrentExperiment()}
+        >
           New / Reset
         </button>
         <button className="rounded-md border border-gray-700 px-3 py-1 text-sm text-gray-200 hover:bg-gray-800">

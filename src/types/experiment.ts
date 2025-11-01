@@ -20,6 +20,7 @@ export interface Experiment {
   theory: string;
   safetyPrecautions: string[];
   learningOutcomes: string[];
+  observationPrompts?: string[];
 }
 
 export interface ExperimentCategory {
